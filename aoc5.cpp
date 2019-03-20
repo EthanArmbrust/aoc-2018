@@ -20,7 +20,7 @@ int main(){
 			i = 0;
 		}
 	}
-	cout <<  s << endl;
+	cout << s.length() << endl;
 
 	
 	return 0;
