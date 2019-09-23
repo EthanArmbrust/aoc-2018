@@ -72,23 +72,25 @@ int main(){
 		}
 	}
 
+	int min, guard, freq = 0;
 
-	sort(guards.begin(), guards.end(), compare_slams);
-	guard &gu = guards[guards.size() - 1];
-
-	vector<int> minute_freq(60, 0);
-
-	for(auto p : gu.sleep_times){
-		for(int i = p.first; i <= p.second; i++){
-			minute_freq[i]++;
+	for(auto &g : guards){
+		vector<int> minute_freq(60, 0);
+		for(auto p : g.sleep_times){
+			for(int i = p.first; i <= p.second; i++){
+				minute_freq[i]++;
+			}
+		}
+		int minute = max_element(minute_freq.begin(), minute_freq.end()) - minute_freq.begin();
+		int frequency = *max_element(minute_freq.begin(), minute_freq.end());
+		if(frequency > freq){
+			freq = frequency;
+			min = minute;
+			guard = g.id;
 		}
 	}
-	
-	int minute = max_element(minute_freq.begin(), minute_freq.end()) - minute_freq.begin();
-	cout << gu.id << endl;
-	cout << minute << endl;
-	cout << gu.id * minute << endl;
 
+	cout << guard * min << endl;
 
     return 0;
 }
