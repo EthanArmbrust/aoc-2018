@@ -82,22 +82,40 @@ int main(){
 		}
 	}
 
+    for(auto p : gu.sleep_times){
+        cout << p.first << endl;
+        cout << p.second << endl;
+    }
+    cout << endl;
+
 	vector<int> minutes;
 	for(auto p : gu.sleep_times){
 		minutes.push_back(p.first);
 		minutes.push_back(p.second);
 	}
 
-	int highest_min, latest_val = -1;
-	int high_count = 0;
-	int latest_count = 0;
+    sort(minutes.begin(), minutes.end());
 
-	for(int i = 0; i < minutes.size(); i++){
+	int highest_min;
+	int high_count = 0;
+	int latest_count = 1;
+
+	for(int i = 1; i < minutes.size(); i++){
+        if(minutes[i] == minutes[i-1]){
+            latest_count++;
+        }
+        else{
+            if(latest_count > high_count){
+                highest_min = minutes[i-1];
+                high_count = latest_count;
+            }
+            latest_count = 1;
+        }
 	}
 
-	
+    cout << highest_min << endl;
 
-	cout << max_guard << endl;
+    cout << highest_min * gu.id << endl;
 
     return 0;
 }
