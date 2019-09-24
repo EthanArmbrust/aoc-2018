@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
 
-    ifstream infile("input7.txt");
+    ifstream infile("input/7.txt");
     vector<string> inputList;
 
     string s;
@@ -20,9 +20,11 @@ int main(){
     int s_index = 36;
 
     map<char, string> dep;
+    vector<string> deps(26, "");
 
     for(auto str : inputList){
         dep[str[s_index]] += str[f_index];
+        deps[str[s_index] - 'A'] += str[f_index];
     }
 
     vector<char> uncompleted;
@@ -31,48 +33,34 @@ int main(){
     }
     string completed = "";
 
-    cout << "uncompleted length: " << uncompleted.size() << endl;
-
     for(int k = 0; k < uncompleted.size(); k++){
         char key = uncompleted[k];
-        map<char, string>::iterator it = dep.find(key);
-        if(it == dep.end()){
+        if(deps[int(key - 'A')] == ""){
             completed += key;
             cout << "Removing " << key << endl;
             uncompleted.erase(remove(uncompleted.begin(), uncompleted.end(), key), uncompleted.end());
             k--;
         }
-        /*
-        else{
-            cout << key << " depends on " << dep.at(key) << endl;
-        }
-        */
+    }
+    for(int i = 0; i < deps.size(); i++){
+        cout << char('A' + i) << " depends on " << deps[i] << endl;
     }
 
-    
-    for(auto const& p : dep){
-        cout << p.first << " depends on " << p.second << endl;
-    }
-    
+    cout << uncompleted.size() << endl;
     while(uncompleted.size() != 0){
-        //for(int z = 0; z <= dep.size(); z++){
-        for(auto const& p : dep){ //for each key in dependancy list
-        //for(map<char, string>::iterator p = dep.begin(); p != dep.end(); ++p){
-            //map<char, string>::iterator p = dep.begin() + z;
+        for(int i = 0; i < uncompleted.size(); i++){
+            char key = uncompleted[i];
             bool unmet_dep = false;
-            for(char c : p.second){ //for each dependancy in the list
-                if(completed.find(c) == string::npos){
+            for(auto c : deps[key - 'A']){
+                if(find(uncompleted.begin(), uncompleted.end(), c) != uncompleted.end()){
                     unmet_dep = true;
                 }
             }
             if(!unmet_dep){
-                completed += p.first;
-                cout << "Removing " << p.first << endl;
-
-                map<char, string>::iterator iter = dep.find(p.first);
-                dep.erase(iter);
-                //--p;
-                uncompleted.erase(remove(uncompleted.begin(), uncompleted.end(), p.first), uncompleted.end()); 
+                completed += key;
+                cout << "Removing " << key << endl;
+                uncompleted.erase(remove(uncompleted.begin(), uncompleted.end(), key), uncompleted.end());
+                i--;
             }
         }
     }
