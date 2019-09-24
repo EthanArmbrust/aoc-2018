@@ -77,7 +77,12 @@ int main(){
             }
         }
         //Assign jobs in queue to elf
-        for(int i = 0; i < 
+        for(int i = 0; i < elves.size(); i++){
+            elfo &elf = elves[i];
+            if(elf.current_job == '.'){
+                
+            }
+        }
 
 
         time++;
