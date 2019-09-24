@@ -13,7 +13,7 @@ struct elfo{
 
 int main(){
 
-    ifstream infile("input/7.txt");
+    ifstream infile("input/test7.txt");
     vector<string> inputList;
 
     string s;
@@ -24,10 +24,10 @@ int main(){
     int f_index = 5;
     int s_index = 36;
 
-    int bonus_time = 60;
+    int bonus_time = 0;
 
-    vector<string> deps(26, "");
-    vector<elfo> elves(5);
+    vector<string> deps(6, "");
+    vector<elfo> elves(2);
     queue<char> job_queue;
 
     for(auto str : inputList){
@@ -35,7 +35,7 @@ int main(){
     }
 
     vector<char> uncompleted;
-    for(char letter = 'A'; letter <= 'Z'; letter++){
+    for(char letter = 'A'; letter <= 'F'; letter++){
         uncompleted.push_back(letter);
     }
     string completed = "";
@@ -50,7 +50,7 @@ int main(){
         }
     }
     int time = 0;
-    while(completed.length() < 26){
+    while(completed.length() < 6){
         //clear out any done jobs
         for(auto &elf : elves){
             if(elf.current_job != '.'){
@@ -89,8 +89,6 @@ int main(){
         }
         time++;
     }
-
-	time--; //off by one error
 
     cout << completed << endl;
     cout << "string length: " << completed.length() << endl;
