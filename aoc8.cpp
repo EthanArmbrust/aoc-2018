@@ -50,6 +50,24 @@ int meta_sum(Node head){
 	return sum;
 }
 
+int part_2(Node &head){
+	int sum = 0;
+	if(head.children.size() == 0){
+		for(auto i : head.metadata){
+			sum += i;
+		}
+	}
+	else{
+		for(auto i : head.metadata){
+			if(i <= head.children.size() && i > 0){
+				Node &c = head.children[i - 1];
+				sum += part_2(c);
+			}
+		}
+	}
+	return sum;
+}
+
 int main(){
 
 	ifstream infile("input/8.txt");
@@ -66,6 +84,8 @@ int main(){
 	Node head = build_nodes(numbers);
 	int result = meta_sum(head);
 	cout << result << endl;
+	int part2 = part_2(head);
+	cout << part2 << endl;
 
 
 	return 0;
