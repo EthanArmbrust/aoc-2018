@@ -8,7 +8,7 @@ using namespace std;
 int main(){
 
 	int input_players = 416;
-	int last_marble = 71975;
+	int last_marble = 71975 * 100;
 
 	vector<int> marble_circle(1,0); //start out with 0 to get things rolling
 	vector<int> elves(input_players, 0); //keeps track of score
