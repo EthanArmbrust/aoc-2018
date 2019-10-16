@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,16 +13,32 @@ struct point{
     int yvel;
 };
 
+int minX = INT_MAX, minY = INT_MAX;
+int maxX = INT_MIN, maxY = INT_MIN;
+
+bool compare_points(const point &p, const point &q){
+	if(p.ypos == q.ypos){
+		return p.xpos < q.xpos;
+	}
+	else return p.ypos < q.ypos;
+}
+
 void tick_forward(vector<point> &ps){
     for(auto &p : ps){
         p.xpos += p.xvel;
         p.ypos += p.yvel;
     }
 }
+void tick_backward(vector<point> &ps){
+    for(auto &p : ps){
+        p.xpos -= p.xvel;
+        p.ypos -= p.yvel;
+    }
+}
 
-long bb_area(vector<point> &ps){
-    int minX = INT_MAX, miny = INT_MAX;
-    int maxX = INT_MIN, maxY = INT_MIN;
+long long bb_area(vector<point> &ps){
+ 	minX = INT_MAX, minY = INT_MAX;
+    maxX = INT_MIN, maxY = INT_MIN;
     for(auto &p : ps){
         if(p.xpos < minX){
             minX = p.xpos;
@@ -36,7 +53,18 @@ long bb_area(vector<point> &ps){
             maxY = p.ypos;
         }
     }
-    return (maxX - minX) * (maxY - minY);
+    return (long long)(maxX - minX) * (long long)(maxY - minY);
+}
+
+void draw_points(vector<point> &ps){
+	string line(maxX - minX + 1, '.');
+	vector<string> grid(maxY - minY + 1, line);
+	for(auto &p : ps){
+		grid[p.ypos - minY][p.xpos - minX] = '#';
+	}
+	for(auto &l : grid){
+		cout << l << endl;
+	}
 }
 
 int main(){
@@ -51,13 +79,32 @@ int main(){
         points.push_back(p);
     }
 
-    long prev_area = LONG_MAX;
-    long bb_area_l = bb_area(points);
+    long long prev_area = LONG_MAX;
+    long long bb_area_l = bb_area(points);
+	
+	int step = 0;
+	cout << "Step " << step << " bb: " << bb_area_l << endl;
+	cout << "minx " << minX << endl;
+	cout << "maxX " << maxX << endl;
+	cout << "miny " << minY << endl;
+	cout << "maxy " << maxY << endl;
+	//draw_points(points);
 
-    while(bb_area_l < pre_area){
+    while(bb_area_l < prev_area){
         tick_forward(points);
+		prev_area = bb_area_l;
         bb_area_l = bb_area(points);
+		step++;
+		cout << "Step " << step << " bb: " << bb_area_l << endl;
+		//draw_points(points);
     }
+	tick_backward(points);
+	bb_area_l = bb_area(points);
+	cout << endl;
+
+	sort(points.begin(), points.end(), compare_points);
+	draw_points(points);
+	cout << --step << endl;
 
     cout << "done" << endl;
 
