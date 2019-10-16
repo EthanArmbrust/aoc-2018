@@ -57,7 +57,7 @@ long long bb_area(vector<point> &ps){
 }
 
 void draw_points(vector<point> &ps){
-	string line(maxX - minX + 1, '.');
+	string line(maxX - minX + 1, ' ');
 	vector<string> grid(maxY - minY + 1, line);
 	for(auto &p : ps){
 		grid[p.ypos - minY][p.xpos - minX] = '#';
@@ -83,20 +83,12 @@ int main(){
     long long bb_area_l = bb_area(points);
 	
 	int step = 0;
-	cout << "Step " << step << " bb: " << bb_area_l << endl;
-	cout << "minx " << minX << endl;
-	cout << "maxX " << maxX << endl;
-	cout << "miny " << minY << endl;
-	cout << "maxy " << maxY << endl;
-	//draw_points(points);
 
     while(bb_area_l < prev_area){
         tick_forward(points);
 		prev_area = bb_area_l;
         bb_area_l = bb_area(points);
 		step++;
-		cout << "Step " << step << " bb: " << bb_area_l << endl;
-		//draw_points(points);
     }
 	tick_backward(points);
 	bb_area_l = bb_area(points);
